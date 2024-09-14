@@ -4,6 +4,7 @@
 
 ## Project Links
 - **Main Project**: [Eshan-Sharma/SolRaise](https://github.com/Eshan-Sharma/SolRaise)
+- **Main Project Live Link**: [https://sol-raise.vercel.app/](https://sol-raise.vercel.app/)
 - **Mobile Project**: [Eshan-Sharma/SolRaise-Mobile](https://github.com/Eshan-Sharma/SolRaise-Mobile)
 
 ---
