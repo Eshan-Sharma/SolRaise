@@ -12,7 +12,7 @@
 
 - **Escrow Account on Solana**: [Solana Explorer](https://explorer.solana.com/tx/3hpSchewHDvWHm6B9Wk5KqtDjrhzdJDTdafad7iym6sAMnNmXksMKiEzy2NdMgLAP4LRsjN3X2p6F6Xf5XvQbALN?cluster=devnet)
 - **Escrow Program ID**: HqqkyS7miTreeC6qhj4iCPD8cuAtbGgiRbJceCGdF9AB
-- **Anchor IDL**: [IDL.json](idl.json)
+- **Anchor IDL**: [IDL.json](solana-escrow/idl.json)
 - ![alt text](image.png)
 
 ---
