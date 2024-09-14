@@ -116,8 +116,8 @@ This project and everyone participating in it is governed by our **Code of Condu
 
 ## Community
 
-- Join our [Discord server](#) for real-time discussions.
-- Follow us on [Twitter](#) for project updates.
+- Join our [Discord server](https://discord.gg/AUahUhkrf3) for real-time discussions.
+- Follow us on [Twitter](https://x.com/SRaise30230) for project updates.
 
 ---
 
