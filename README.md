@@ -1,36 +1,89 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# SolRaise
 
-## Getting Started
+**SolRaise** is a decentralized crowdfunding platform built on the Solana blockchain, designed to democratize fundraising and make it more efficient, transparent, and accessible to a global audience.
 
-First, run the development server:
+## Project Links
+- **Main Project**: [Eshan-Sharma/SolRaise](https://github.com/Eshan-Sharma/SolRaise)
+- **Mobile Project**: [Eshan-Sharma/SolRaise-Mobile](https://github.com/Eshan-Sharma/SolRaise-Mobile)
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+---
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Project Details
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+### Problem Statement
+Traditional crowdfunding platforms face issues with inefficiency, high fees, and limited accessibility. **SolRaise** aims to solve these problems by leveraging blockchain technology and innovative features.
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+### Solution
+SolRaise addresses these challenges by:
+- Leveraging the Solana blockchain for fast, low-cost transactions
+- Developing a user-friendly interface for both web and mobile (iOS/Android)
+- Implementing donor-recipient matching to foster connections
+- Creating a donation matching system to amplify contributions
+- Ensuring transparency and security through blockchain technology
 
-## Learn More
+Our platform makes fundraising more efficient, transparent, and accessible to a global audience, while incentivizing giving through innovative features like donation matching.
 
-To learn more about Next.js, take a look at the following resources:
+---
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Goals and Milestones
+1. Deploy a fully functional MVP on Solana devnet
+2. Develop and launch the web platform with core features
+3. Release beta versions of mobile apps for iOS and Android
+4. Achieve 100 registered test users on devnet
+5. Successfully execute 10 test fundraising campaigns
+6. Implement and test a smart contract for donation matching
+7. Integrate with at least 3 popular Solana wallets
+8. Conduct thorough testing and bug fixing on devnet
+9. Gather user feedback and implement key improvements
+10. Prepare a comprehensive plan for mainnet migration
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+---
 
-## Deploy on Vercel
+## Key Performance Indicators (KPIs)
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+### Primary KPI: Number of Successful Test Transactions
+- **Success Milestone**: 10-100 successful test transactions within three months of devnet deployment.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+### Secondary KPIs:
+- Number of registered test users
+- Number of completed test campaigns
+- Average response time for transactions
+- User-reported bugs and their resolution rate
+
+---
+
+## Setup Instructions for Next.js Project
+
+To set up the **SolRaise** Next.js project locally, follow these steps:
+
+1. **Clone the repository**:
+    ```bash
+    git clone https://github.com/Eshan-Sharma/SolRaise.git
+    cd SolRaise
+    ```
+
+2. **Install dependencies**:
+    ```bash
+    npm install
+    ```
+
+3. **Set up environment variables**:
+    Create a `.env.local` file in the root directory and add the necessary environment variables (e.g., Solana RPC URL, API keys).
+
+4. **Run the development server**:
+    ```bash
+    npm run dev
+    ```
+
+5. **Open your browser**:
+    Navigate to `http://localhost:3000` to view the application.
+
+---
+
+## Contributing
+We welcome contributions to **SolRaise**! Please read our [CONTRIBUTING.md](CONTRIBUTING.md) file for guidelines on how to submit pull requests, report issues, and suggest improvements.
+
+---
+
+## License
+This project is licensed under the MIT License.
