@@ -173,9 +173,9 @@ https://makeagif.com/gif/-f4v626
 2. Bob deposits Token B into the escrow program after confirming Alice's deposit.
 3. Once both deposits are made, the escrow program swaps the tokens:
 
-  Alice receives Bob’s Token B.
+    Alice receives Bob’s Token B.
 
-  Bob receives Alice’s Token A.
+    Bob receives Alice’s Token A.
   
 5. If Bob fails to deposit Token B within a set time limit, Alice can cancel the trade and retrieve her Token A.
 ---
