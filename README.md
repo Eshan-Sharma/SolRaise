@@ -9,6 +9,7 @@
 - **Mobile Project**: [Eshan-Sharma/SolRaise-Mobile](https://github.com/Eshan-Sharma/SolRaise-Mobile)
 
 ## Solana Escrow Contract Information
+- **Wallet used for deployment**: Ei6ERbXYRcDGnrrTJv7zRtMdyP14intfof9C7mLPjE8P
 
 ### Updated Deployment
 - **Escrow Program ID**: HqqkyS7miTreeC6qhj4iCPD8cuAtbGgiRbJceCGdF9AB
