@@ -9,6 +9,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Switch } from "@/components/ui/switch"
 import { CircleDollarSign, PlusCircle, ChevronLeft, ChevronRight, TrendingUp, Users, DollarSign } from "lucide-react"
 import { WalletMultiButton } from "@solana/wallet-adapter-react-ui"
+import DonationModal from "./DonationModal"
 
 const Spinner = () => (
     <div className="flex justify-center items-center h-screen">
@@ -16,14 +17,22 @@ const Spinner = () => (
     </div>
 );
 
+interface Project {
+    id: number;
+    title: string;
+    goal: number;
+    raised: number;
+    daysLeft?: number;
+    image: string;
+}
 
 
 export default function HomePage() {
-    const [mode, setMode] = useState("donor")
-
-    const [isMounted, setIsMounted] = useState(false)
-
-    const [currentProjectIndex, setCurrentProjectIndex] = useState(0)
+    const [mode, setMode] = useState<"donor" | "recipient">("donor")
+    const [isMounted, setIsMounted] = useState<boolean>(false)
+    const [currentProjectIndex, setCurrentProjectIndex] = useState<number>(0)
+    const [isModalOpen, setIsModalOpen] = useState<boolean>(false)
+    const [selectedProject, setSelectedProject] = useState<Project | null>(null)
 
     const projects = [
         { id: 1, title: "Community Garden", goal: 5000, raised: 2500, image: "/placeholder.svg?height=200&width=400" },
@@ -43,6 +52,11 @@ export default function HomePage() {
         }, 5000)
         return () => clearInterval(timer)
     }, [projects.length])
+
+    const openDonationModal = (project: Project) => {
+        setSelectedProject(project)
+        setIsModalOpen(true)
+    }
 
     if (!isMounted) {
         return <Spinner />;
@@ -66,7 +80,7 @@ export default function HomePage() {
             <main className="container mx-auto p-4">
                 {/* Hero Section */}
                 <section className="py-20 text-center">
-                    <h2 className="text-5xl font-bold mb-4">Empower Change with Solana</h2>
+                    <h2 className="text-6xl font-bold mb-4 ">Empower Change with Solana</h2>
                     <p className="text-xl mb-8">Fund innovative projects or create your own campaign on our decentralized platform.</p>
                     <Button className="bg-white text-black hover:bg-gray-200 text-lg py-6 px-8">Get Started</Button>
                 </section>
@@ -109,7 +123,7 @@ export default function HomePage() {
 
                 {/* Mode Toggle */}
                 <div className="flex justify-end mb-4 items-center space-x-2">
-                    <Label htmlFor="mode-toggle" className="text-sm font-medium">Recipient Mode</Label>
+                    <Label htmlFor="mode-toggle" className="text-sm font-medium text-white">Recipient Mode</Label>
                     <Switch
                         id="mode-toggle"
                         checked={mode === "recipient"}
@@ -120,34 +134,37 @@ export default function HomePage() {
                 {/* Main Tabs */}
                 <Tabs defaultValue="projects" className="w-full mb-20">
                     <TabsList className="grid w-full grid-cols-2 mb-8">
-                        <TabsTrigger value="projects" className="text-lg">
+                        <TabsTrigger value="projects" className="text-xl text-white">
                             {mode === "donor" ? "Explore Projects" : "My Projects"}
                         </TabsTrigger>
-                        <TabsTrigger value="create" className="text-lg">
+                        <TabsTrigger value="create" className="text-xl text-purple-400">
                             {mode === "donor" ? "Make a Donation" : "Create Project"}
                         </TabsTrigger>
                     </TabsList>
                     <TabsContent value="projects">
                         <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
                             {projects.map((project) => (
-                                <Card key={project.id} className="bg-gray-900 hover:bg-gray-800 transition-colors">
+                                <Card key={project.id} className="bg-gray-800 border border-gray-700 hover:bg-gray-700 transition-colors">
                                     <CardHeader>
-                                        <CardTitle>{project.title}</CardTitle>
-                                        <CardDescription>
+                                        <CardTitle className="text-white text-xl">{project.title}</CardTitle>
+                                        <CardDescription className="text-gray-300">
                                             Goal: {project.goal} SOL | Raised: {project.raised} SOL
                                         </CardDescription>
                                     </CardHeader>
                                     <CardContent>
                                         <div className="h-2 bg-gray-700 rounded-full">
                                             <div
-                                                className="h-full bg-white rounded-full transition-all duration-500 ease-in-out"
+                                                className="h-full bg-purple-400 rounded-full transition-all duration-500 ease-in-out"
                                                 style={{ width: `${(project.raised / project.goal) * 100}%` }}
                                             />
                                         </div>
                                     </CardContent>
                                     <CardFooter>
                                         {mode === "donor" && (
-                                            <Button className="w-full bg-white text-black hover:bg-gray-200">
+                                            <Button
+                                                className="w-full bg-white text-gray-800 hover:bg-gray-200"
+                                                onClick={() => openDonationModal(project)}
+                                            >
                                                 <CircleDollarSign className="mr-2 h-4 w-4" /> Donate
                                             </Button>
                                         )}
@@ -157,30 +174,30 @@ export default function HomePage() {
                         </div>
                     </TabsContent>
                     <TabsContent value="create">
-                        <Card className="bg-gray-900">
+                        <Card className="bg-gray-800 border border-gray-700">
                             <CardHeader>
-                                <CardTitle>{mode === "donor" ? "Make a Donation" : "Create a Project"}</CardTitle>
+                                <CardTitle className="text-white">{mode === "donor" ? "Make a Donation" : "Create a Project"}</CardTitle>
                             </CardHeader>
                             <CardContent>
                                 <form className="space-y-4">
                                     <div className="space-y-2">
-                                        <Label htmlFor="name">{mode === "donor" ? "Project Name" : "Project Title"}</Label>
-                                        <Input id="name" placeholder="Enter name" className="bg-gray-800" />
+                                        <Label htmlFor="name" className="text-white">{mode === "donor" ? "Project Name" : "Project Title"}</Label>
+                                        <Input id="name" placeholder="Enter name" className="bg-gray-700 text-white placeholder-gray-400" />
                                     </div>
                                     <div className="space-y-2">
-                                        <Label htmlFor="amount">{mode === "donor" ? "Donation Amount" : "Funding Goal"}</Label>
-                                        <Input id="amount" placeholder="Enter amount in SOL" type="number" step="0.1" className="bg-gray-800" />
+                                        <Label htmlFor="amount" className="text-white">{mode === "donor" ? "Donation Amount" : "Funding Goal"}</Label>
+                                        <Input id="amount" placeholder="Enter amount in SOL" type="number" step="0.1" className="bg-gray-700 text-white placeholder-gray-400" />
                                     </div>
                                     {mode === "recipient" && (
                                         <div className="space-y-2">
-                                            <Label htmlFor="description">Project Description</Label>
-                                            <Input id="description" placeholder="Enter project description" className="bg-gray-800" />
+                                            <Label htmlFor="description" className="text-white">Project Description</Label>
+                                            <Input id="description" placeholder="Enter project description" className="bg-gray-700 text-white placeholder-gray-400" />
                                         </div>
                                     )}
                                 </form>
                             </CardContent>
                             <CardFooter>
-                                <Button className="w-full bg-white text-black hover:bg-gray-200">
+                                <Button className="w-full bg-white text-gray-800 hover:bg-gray-200">
                                     {mode === "donor" ? (
                                         <>
                                             <CircleDollarSign className="mr-2 h-4 w-4" /> Donate
@@ -195,39 +212,39 @@ export default function HomePage() {
                         </Card>
                     </TabsContent>
                 </Tabs>
-
                 {/* Statistics Section */}
-                <section id="stats" className="py-20 border-t border-gray-800">
-                    <h3 className="text-3xl font-bold mb-8 text-center">Platform Statistics</h3>
+
+                <section id="stats" className="py-20 border-t border-gray-700">
+                    <h3 className="text-4xl font-bold mb-8 text-center text-purple-300">Platform Statistics</h3>
                     <div className="grid md:grid-cols-3 gap-8">
-                        <Card className="bg-gray-900">
+                        <Card className="bg-gray-800 border border-gray-700">
                             <CardHeader>
-                                <CardTitle className="flex items-center">
+                                <CardTitle className="flex items-center text-purple-300 text-xl">
                                     <TrendingUp className="mr-2 h-6 w-6" /> Total Raised
                                 </CardTitle>
                             </CardHeader>
                             <CardContent>
-                                <p className="text-4xl font-bold">50,000 SOL</p>
+                                <p className="text-4xl font-bold text-white">50,000 SOL</p>
                             </CardContent>
                         </Card>
-                        <Card className="bg-gray-900">
+                        <Card className="bg-gray-800 border border-gray-700">
                             <CardHeader>
-                                <CardTitle className="flex items-center">
+                                <CardTitle className="flex items-center text-purple-300 text-xl">
                                     <Users className="mr-2 h-6 w-6" /> Active Projects
                                 </CardTitle>
                             </CardHeader>
                             <CardContent>
-                                <p className="text-4xl font-bold">250+</p>
+                                <p className="text-4xl font-bold text-white">250+</p>
                             </CardContent>
                         </Card>
-                        <Card className="bg-gray-900">
+                        <Card className="bg-gray-800 border border-gray-700">
                             <CardHeader>
-                                <CardTitle className="flex items-center">
+                                <CardTitle className="flex items-center text-purple-300 text-xl">
                                     <DollarSign className="mr-2 h-6 w-6" /> Avg. Donation
                                 </CardTitle>
                             </CardHeader>
                             <CardContent>
-                                <p className="text-4xl font-bold">20 SOL</p>
+                                <p className="text-4xl font-bold text-white">20 SOL</p>
                             </CardContent>
                         </Card>
                     </div>
@@ -279,6 +296,13 @@ export default function HomePage() {
                     <div className="mt-8 pt-8 border-t border-gray-800 text-center text-sm text-gray-400">
                         © {new Date().getFullYear()} Solana Crowdfunding. All rights reserved.
                     </div>
+                    {selectedProject && (
+                        <DonationModal
+                            project={selectedProject}
+                            isOpen={isModalOpen}
+                            onClose={() => setIsModalOpen(false)}
+                        />
+                    )}
                 </div>
             </footer>
         </div>
