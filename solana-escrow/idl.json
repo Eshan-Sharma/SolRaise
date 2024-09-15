@@ -1,73 +1,119 @@
 {
   "version": "0.1.0",
-  "name": "anchor_escrow",
+  "name": "crowdfunding_escrow",
   "instructions": [
     {
-      "name": "make",
+      "name": "initializeCampaign",
       "accounts": [
-        { "name": "maker", "isMut": true, "isSigner": true },
-        { "name": "mintA", "isMut": false, "isSigner": false },
-        { "name": "mintB", "isMut": false, "isSigner": false },
-        { "name": "makerAtaA", "isMut": true, "isSigner": false },
-        { "name": "escrow", "isMut": true, "isSigner": false },
-        { "name": "vault", "isMut": true, "isSigner": false },
-        { "name": "associatedTokenProgram", "isMut": false, "isSigner": false },
-        { "name": "tokenProgram", "isMut": false, "isSigner": false },
+        { "name": "campaign", "isMut": true, "isSigner": false },
+        { "name": "creator", "isMut": true, "isSigner": true },
         { "name": "systemProgram", "isMut": false, "isSigner": false }
       ],
       "args": [
-        { "name": "seed", "type": "u64" },
-        { "name": "deposit", "type": "u64" },
-        { "name": "receive", "type": "u64" }
+        { "name": "campaignId", "type": "u64" },
+        { "name": "goalAmount", "type": "u64" },
+        { "name": "duration", "type": "i64" }
       ]
     },
     {
-      "name": "refund",
+      "name": "donate",
       "accounts": [
-        { "name": "maker", "isMut": true, "isSigner": true },
-        { "name": "mintA", "isMut": false, "isSigner": false },
-        { "name": "makerAtaA", "isMut": true, "isSigner": false },
-        { "name": "escrow", "isMut": true, "isSigner": false },
-        { "name": "vault", "isMut": true, "isSigner": false },
-        { "name": "associatedTokenProgram", "isMut": false, "isSigner": false },
+        { "name": "campaign", "isMut": true, "isSigner": false },
+        { "name": "donor", "isMut": true, "isSigner": true },
+        { "name": "donorTokenAccount", "isMut": true, "isSigner": false },
+        { "name": "campaignTokenAccount", "isMut": true, "isSigner": false },
+        { "name": "donation", "isMut": true, "isSigner": false },
         { "name": "tokenProgram", "isMut": false, "isSigner": false },
         { "name": "systemProgram", "isMut": false, "isSigner": false }
+      ],
+      "args": [{ "name": "amount", "type": "u64" }]
+    },
+    {
+      "name": "finalizeCampaign",
+      "accounts": [
+        { "name": "campaign", "isMut": true, "isSigner": false },
+        { "name": "campaignAuthority", "isMut": false, "isSigner": false },
+        { "name": "campaignTokenAccount", "isMut": true, "isSigner": false },
+        { "name": "creatorTokenAccount", "isMut": true, "isSigner": false },
+        { "name": "tokenProgram", "isMut": false, "isSigner": false }
       ],
       "args": []
     },
     {
-      "name": "take",
+      "name": "refund",
       "accounts": [
-        { "name": "taker", "isMut": true, "isSigner": true },
-        { "name": "maker", "isMut": true, "isSigner": false },
-        { "name": "mintA", "isMut": false, "isSigner": false },
-        { "name": "mintB", "isMut": false, "isSigner": false },
-        { "name": "takerAtaA", "isMut": true, "isSigner": false },
-        { "name": "takerAtaB", "isMut": true, "isSigner": false },
-        { "name": "makerAtaB", "isMut": true, "isSigner": false },
-        { "name": "escrow", "isMut": true, "isSigner": false },
-        { "name": "vault", "isMut": true, "isSigner": false },
-        { "name": "associatedTokenProgram", "isMut": false, "isSigner": false },
-        { "name": "tokenProgram", "isMut": false, "isSigner": false },
-        { "name": "systemProgram", "isMut": false, "isSigner": false }
+        { "name": "campaign", "isMut": true, "isSigner": false },
+        { "name": "campaignAuthority", "isMut": false, "isSigner": false },
+        { "name": "campaignTokenAccount", "isMut": true, "isSigner": false },
+        { "name": "donor", "isMut": true, "isSigner": true },
+        { "name": "donorTokenAccount", "isMut": true, "isSigner": false },
+        { "name": "donation", "isMut": true, "isSigner": false },
+        { "name": "tokenProgram", "isMut": false, "isSigner": false }
       ],
       "args": []
     }
   ],
   "accounts": [
     {
-      "name": "Escrow",
+      "name": "Campaign",
       "type": {
         "kind": "struct",
         "fields": [
-          { "name": "seed", "type": "u64" },
-          { "name": "maker", "type": "publicKey" },
-          { "name": "mintA", "type": "publicKey" },
-          { "name": "mintB", "type": "publicKey" },
-          { "name": "receive", "type": "u64" },
+          { "name": "creator", "type": "publicKey" },
+          { "name": "id", "type": "u64" },
+          { "name": "goalAmount", "type": "u64" },
+          { "name": "endTime", "type": "i64" },
+          { "name": "totalFunded", "type": "u64" },
+          { "name": "isActive", "type": "bool" },
           { "name": "bump", "type": "u8" }
         ]
       }
+    },
+    {
+      "name": "Donation",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          { "name": "donor", "type": "publicKey" },
+          { "name": "campaign", "type": "publicKey" },
+          { "name": "amount", "type": "u64" },
+          { "name": "refunded", "type": "bool" },
+          { "name": "bump", "type": "u8" }
+        ]
+      }
+    }
+  ],
+  "errors": [
+    {
+      "code": 6000,
+      "name": "CampaignInactive",
+      "msg": "The campaign is not active"
+    },
+    { "code": 6001, "name": "CampaignEnded", "msg": "The campaign has ended" },
+    {
+      "code": 6002,
+      "name": "CampaignNotEnded",
+      "msg": "The campaign has not ended yet"
+    },
+    {
+      "code": 6003,
+      "name": "CampaignStillActive",
+      "msg": "The campaign is still active"
+    },
+    {
+      "code": 6004,
+      "name": "CampaignSuccessful",
+      "msg": "The campaign was successful, no refunds allowed"
+    },
+    {
+      "code": 6005,
+      "name": "InvalidDonor",
+      "msg": "Invalid donor for this donation"
+    },
+    {
+      "code": 6006,
+      "name": "AlreadyRefunded",
+      "msg": "This donation has already been refunded"
     }
   ]
 }
