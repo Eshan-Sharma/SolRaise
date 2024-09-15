@@ -1,14 +1,21 @@
 "use client";
 
-import { useState, useEffect } from "react"
-import { Button } from "@/components/ui/button"
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
-import { Input } from "@/components/ui/input"
-import { CircleDollarSign, TrendingUp, Users, DollarSign } from "lucide-react"
-import { WalletMultiButton } from "@solana/wallet-adapter-react-ui"
-import DonationModal from "./DonationModal"
-import CampaignModal from "./CampaignModal"
-import ProjectCarousel from "./ProjectCarousel"
+import { useState, useEffect } from "react";
+import { Button } from "@/components/ui/button";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { CircleDollarSign, TrendingUp, Users, DollarSign } from "lucide-react";
+import { WalletMultiButton } from "@solana/wallet-adapter-react-ui";
+import DonationModal from "./DonationModal";
+import CampaignModal from "./CampaignModal";
+import ProjectCarousel from "./ProjectCarousel";
 
 const Spinner = () => (
   <div className="flex justify-center items-center h-screen">
