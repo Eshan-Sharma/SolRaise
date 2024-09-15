@@ -8,6 +8,29 @@
 - **Main Project Live Link**: [https://sol-raise.vercel.app/](https://sol-raise.vercel.app/)
 - **Mobile Project**: [Eshan-Sharma/SolRaise-Mobile](https://github.com/Eshan-Sharma/SolRaise-Mobile)
 
+
+## Tech Stack
+
+### Web Application (SolRaise)
+- **Frontend Framework:** [Next.js](https://nextjs.org/) – A React-based framework for server-side rendering and static site generation.
+- **Database ORM:** [Prisma](https://www.prisma.io/) – An intuitive ORM for managing database schemas and migrations, providing type-safe queries.
+- **Database:** [PostgreSQL](https://www.postgresql.org/) – A powerful, open-source relational database used to store and manage application data.
+- **CSS Framework:** [Tailwind CSS](https://tailwindcss.com/) – A utility-first CSS framework for designing a highly customizable UI.
+- **UI Components:** [ShadCN UI](https://shadcn.dev/) – A modern UI library built on Radix Primitives and Tailwind CSS.
+- **Blockchain:** [Solana](https://solana.com/) – A high-performance blockchain for fast, low-cost decentralized applications.
+- **Smart Contracts Framework:** [Anchor](https://project-serum.github.io/anchor/) – A framework for building and deploying Solana smart contracts using Rust.
+- **Language for Smart Contracts:** [Rust](https://www.rust-lang.org/) – A memory-efficient language, ideal for building reliable and high-performance Solana smart contracts.
+
+### Mobile Application (SolRaise)
+- **Framework:** [Expo](https://expo.dev/) – A powerful React Native framework for building cross-platform mobile applications.
+- **Styling:** [NativeWind](https://www.nativewind.dev/) – Tailwind CSS for React Native, providing utility-based styling for mobile apps.
+- **Database ORM:** [Prisma](https://www.prisma.io/) – Provides a unified data management layer for mobile.
+- **Database:** [PostgreSQL](https://www.postgresql.org/) – Same as the web, PostgreSQL powers the mobile backend for data persistence and management.
+- **Blockchain Integration:** [Solana React Native SDK](https://github.com/solana-labs/wallet-adapter) – A set of tools for integrating Solana into mobile apps with wallet and blockchain support.
+- **Blockchain:** [Solana](https://solana.com/) – Fast and efficient blockchain used for decentralized applications.
+- **Language for Smart Contracts:** [Rust](https://www.rust-lang.org/) – For building Solana programs.
+
+
 ## Solana Escrow Contract Information
 - **Wallet used for deployment**: Ei6ERbXYRcDGnrrTJv7zRtMdyP14intfof9C7mLPjE8P
 
