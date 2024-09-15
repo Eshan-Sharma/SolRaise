@@ -5,6 +5,10 @@ import { Label } from "@/components/ui/label";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter } from "@/components/ui/dialog";
 import { Textarea } from '@/components/ui/textarea';
 import { getSignedURL } from '@/lib/utils';
+import { sendCampaignToDb } from '../actions/storing-data-in-db';
+import { useWallet } from '@solana/wallet-adapter-react';
+import { useToast } from '@/hooks/use-toast';
+import { Loader2 } from 'lucide-react';
 
 interface CampaignModalProps {
     isOpen: boolean;
@@ -14,10 +18,14 @@ interface CampaignModalProps {
 const CampaignModal = ({ isOpen, onClose }: CampaignModalProps) => {
     const [title, setTitle] = useState<string>('');
     const [description, setDescription] = useState<string>('');
-    const [fundingGoal, setFundingGoal] = useState<number | null>(null);
+    const [fundsGoal, setFundingGoal] = useState<number | null>(null);
     const [duration, setDuration] = useState<number | null>(null);
     const [imageUrl, setImageUrl] = useState<string | undefined>('');
     const [imageFile, setImageFile] = useState<File | undefined>(undefined);
+    const [isLoading, setIsLoading] = useState<boolean>(false);
+    const { publicKey } = useWallet();
+
+    const { toast } = useToast()
 
     const resetForm = () => {
         setTitle('');
@@ -46,36 +54,68 @@ const CampaignModal = ({ isOpen, onClose }: CampaignModalProps) => {
     };
 
     const handleCreateCampaign = async () => {
+        if (!publicKey) {
+            toast({
+                variant: "destructive",
+                title: "Wallet not connected",
+                description: "Please connect your wallet to create a campaign.",
+                duration: 3000,
+            });
+            return;
+        }
+
+        if (!title || !description || !fundsGoal || !duration || !imageFile) {
+            toast({
+                variant: "destructive",
+                title: "Incomplete form",
+                description: "Please fill out all fields and upload an image.",
+                duration: 3000,
+            });
+            return;
+        }
+
+        setIsLoading(true);
+
         try {
-            if (imageFile) {
-                console.log("inside file");
-                const signedUrlResult = await getSignedURL(imageFile.name);
-                console.log("signedUrlResult", signedUrlResult);
-                if ('error' in signedUrlResult) {
-                    throw new Error("Unable to post to AWS S3");
-                }
-                const url = signedUrlResult.success.url;
-                console.log("url", url);
-                await fetch(url, {
-                    method: "PUT",
-                    body: imageFile,
-                    headers: {
-                        "Content-Type": imageFile.type || "",
-                    },
-                });
-
-                const imageUrl = url.split('?')[0];
-                console.log(imageUrl);
-
-                // Here you would typically send the campaign data to your backend
-                // For example:
-                // await createCampaign({ title, description, fundingGoal, duration, imageUrl });
+            const signedUrlResult = await getSignedURL(imageFile.name);
+            if ('error' in signedUrlResult) {
+                throw new Error("Unable to get signed URL for image upload");
             }
+
+            const url = signedUrlResult.success.url;
+            await fetch(url, {
+                method: "PUT",
+                body: imageFile,
+                headers: {
+                    "Content-Type": imageFile.type || "",
+                },
+            });
+
+            const imageUrl = url.split('?')[0];
+
+            await sendCampaignToDb(title, description, fundsGoal, duration, publicKey.toString(), imageUrl);
+
+            toast({
+                variant: "default",
+                title: "Campaign created successfully",
+                description: "Your campaign has been uploaded and is now live!",
+                duration: 3000,
+                className: "bg-white text-black border border-gray-200",
+            });
+
             resetForm();
             onClose();
         } catch (error) {
             console.error("Error creating campaign:", error);
-            // Handle error (e.g., show error message to user)
+            toast({
+                variant: "destructive",
+                title: "Campaign creation failed",
+                description: "There was an error creating your campaign. Please try again.",
+                duration: 3000,
+                className: "bg-white text-black border border-gray-200",
+            });
+        } finally {
+            setIsLoading(false);
         }
     };
 
@@ -100,6 +140,7 @@ const CampaignModal = ({ isOpen, onClose }: CampaignModalProps) => {
                             onChange={(e) => setTitle(e.target.value)}
                             className="bg-gray-100 text-gray-900 border-gray-300 rounded-lg px-4 py-2"
                             placeholder="Enter campaign title"
+                            disabled={isLoading}
                         />
                     </div>
                     <div className="space-y-3">
@@ -110,17 +151,19 @@ const CampaignModal = ({ isOpen, onClose }: CampaignModalProps) => {
                             onChange={(e) => setDescription(e.target.value)}
                             className="bg-gray-100 text-gray-900 border-gray-300 rounded-lg px-4 py-2"
                             placeholder="Enter campaign description"
+                            disabled={isLoading}
                         />
                     </div>
                     <div className="space-y-3">
-                        <Label htmlFor="fundingGoal" className="text-lg font-semibold text-gray-700">Funding Goal (SOL)</Label>
+                        <Label htmlFor="fundsGoal" className="text-lg font-semibold text-gray-700">Funding Goal (SOL)</Label>
                         <Input
-                            id="fundingGoal"
+                            id="fundsGoal"
                             type="number"
-                            value={fundingGoal || ''}
+                            value={fundsGoal || ''}
                             onChange={(e) => setFundingGoal(parseFloat(e.target.value))}
                             className="bg-gray-100 text-gray-900 border-gray-300 rounded-lg px-4 py-2"
                             placeholder="Enter funding goal"
+                            disabled={isLoading}
                         />
                     </div>
                     <div className="space-y-3">
@@ -132,6 +175,7 @@ const CampaignModal = ({ isOpen, onClose }: CampaignModalProps) => {
                             onChange={(e) => setDuration(parseInt(e.target.value))}
                             className="bg-gray-100 text-gray-900 border-gray-300 rounded-lg px-4 py-2"
                             placeholder="Enter campaign duration"
+                            disabled={isLoading}
                         />
                     </div>
                     <div className="space-y-3">
@@ -142,12 +186,24 @@ const CampaignModal = ({ isOpen, onClose }: CampaignModalProps) => {
                             onChange={onFileChange}
                             className="bg-gray-100 text-gray-900 border-gray-300 rounded-lg px-4 py-2"
                             accept="image/*"
+                            disabled={isLoading}
                         />
                     </div>
                 </div>
                 <DialogFooter className="mt-8">
-                    <Button onClick={handleCreateCampaign} className="w-full bg-purple-600 hover:bg-purple-700 text-white py-3 text-lg font-semibold rounded-lg transition-all">
-                        Create Campaign
+                    <Button
+                        onClick={handleCreateCampaign}
+                        className="w-full bg-purple-600 hover:bg-purple-700 text-white py-3 text-lg font-semibold rounded-lg transition-all"
+                        disabled={isLoading}
+                    >
+                        {isLoading ? (
+                            <>
+                                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                                Creating Campaign...
+                            </>
+                        ) : (
+                            'Create Campaign'
+                        )}
                     </Button>
                 </DialogFooter>
             </DialogContent>
