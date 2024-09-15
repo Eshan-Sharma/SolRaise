@@ -168,6 +168,13 @@ Alice holds asset A, and Bob holds asset B. Both want to trade their assets, but
 The conventional solution to this dilemma is to involve a third party, C, whom both Alice and Bob trust. In this arrangement, Alice or Bob sends their asset to C first. C then waits until the other party sends their asset, and only after receiving both assets does C release them, completing the trade securely.
 
 https://makeagif.com/gif/-f4v626
+
+1. Alice deposits Token A into an escrow account controlled by an escrow program.
+2. Bob deposits Token B into the escrow program after confirming Alice's deposit.
+3. Once both deposits are made, the escrow program swaps the tokens:
+  Alice receives Bob’s Token B.
+  Bob receives Alice’s Token A.
+4. If Bob fails to deposit Token B within a set time limit, Alice can cancel the trade and retrieve her Token A.
 ---
 
 ## Contributing
