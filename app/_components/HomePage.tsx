@@ -7,8 +7,7 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Switch } from "@/components/ui/switch"
-import { Wallet, CircleDollarSign, PlusCircle, ChevronLeft, ChevronRight, TrendingUp, Users, DollarSign } from "lucide-react"
-import { useConnection, useWallet } from "@solana/wallet-adapter-react"
+import { CircleDollarSign, PlusCircle, ChevronLeft, ChevronRight, TrendingUp, Users, DollarSign } from "lucide-react"
 import { WalletMultiButton } from "@solana/wallet-adapter-react-ui"
 
 const Spinner = () => (
@@ -21,8 +20,7 @@ const Spinner = () => (
 
 export default function HomePage() {
     const [mode, setMode] = useState("donor")
-    const { publicKey } = useWallet();
-    const { connection } = useConnection();
+
     const [isMounted, setIsMounted] = useState(false)
 
     const [currentProjectIndex, setCurrentProjectIndex] = useState(0)
