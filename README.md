@@ -46,6 +46,39 @@
 - **Anchor IDL**: [IDL.json](solana-escrow/idl.json)
 - ![alt text](image.png)
 
+## PostgresSql table
+
+This project uses **PostgreSQL** with **Prisma ORM** to manage a crowdfunding system, consisting of `Campaign` and `Donation` models.
+![image](https://github.com/user-attachments/assets/5f6c861d-4ca8-46cb-bec6-a9f2a4ad936c)
+
+### Table Breakdown
+
+**Campaign Table**
+- id: Unique identifier for the campaign (String).
+- title: Campaign title (String).
+- description: Description of the campaign (String).
+- creatorWallet: The creator's wallet address (String).
+- fundsGoal: The funding goal for the campaign (Float).
+- duration: Duration of the campaign (Int).
+- status: Current status of the campaign. Uses the CampaignStatus enum, which defaults to ACTIVE.
+- createdAt: Timestamp when the campaign was created, defaults to the current time.
+- updatedAt: Timestamp when the campaign was last updated, auto-updates on modification.
+- donations: List of related donations.
+
+**Donation Table**
+- id: Unique identifier for each donation (String).
+- campaignId: Foreign key referencing the campaign (String).
+- campaign: Relation to the Campaign model.
+- donorWallet: The wallet address of the donor (String).
+- amount: Donation amount (Float).
+- createdAt: Timestamp when the donation was made, defaults to the current time.
+
+**CampaignStatus Enum**
+- ACTIVE: Campaign is currently accepting donations.
+- SUCCESSFUL: Campaign reached its funding goal.
+= FAILED: Campaign failed to reach its goal.
+- CANCELED: Campaign was canceled.
+
 ---
 
 ## Project Details
