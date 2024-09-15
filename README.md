@@ -176,6 +176,7 @@ https://makeagif.com/gif/-f4v626
   Alice receives Bob’s Token B.
 
   Bob receives Alice’s Token A.
+  
 5. If Bob fails to deposit Token B within a set time limit, Alice can cancel the trade and retrieve her Token A.
 ---
 
