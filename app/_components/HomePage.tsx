@@ -10,6 +10,7 @@ import { Switch } from "@/components/ui/switch"
 import { CircleDollarSign, PlusCircle, ChevronLeft, ChevronRight, TrendingUp, Users, DollarSign } from "lucide-react"
 import { WalletMultiButton } from "@solana/wallet-adapter-react-ui"
 import DonationModal from "./DonationModal"
+import Image from "next/image"
 
 const Spinner = () => (
     <div className="flex justify-center items-center h-screen">
@@ -35,11 +36,11 @@ export default function HomePage() {
     const [selectedProject, setSelectedProject] = useState<Project | null>(null)
 
     const projects = [
-        { id: 1, title: "Community Garden", goal: 5000, raised: 2500, image: "/placeholder.svg?height=200&width=400" },
-        { id: 2, title: "Local School Renovation", goal: 10000, raised: 7500, image: "/placeholder.svg?height=200&width=400" },
-        { id: 3, title: "Homeless Shelter Support", goal: 8000, raised: 3000, image: "/placeholder.svg?height=200&width=400" },
-        { id: 4, title: "Clean Energy Initiative", goal: 15000, raised: 9000, image: "/placeholder.svg?height=200&width=400" },
-        { id: 5, title: "Youth Sports Program", goal: 6000, raised: 4500, image: "/placeholder.svg?height=200&width=400" },
+        { id: 1, title: "Community Garden", goal: 500, raised: 250, image: "/community-garden.png", daysLeft: 10 },
+        { id: 2, title: "Local School Renovation", goal: 1000, raised: 750, image: "/school-renovation.png", daysLeft: 30 },
+        { id: 3, title: "Homeless Shelter Support", goal: 800, raised: 300, image: "/homeless-support.png", daysLeft: 5 },
+        { id: 4, title: "Clean Energy Initiative", goal: 1500, raised: 900, image: "/clean-energy.png", daysLeft: 100 },
+        { id: 5, title: "Youth Sports Program", goal: 600, raised: 450, image: "/youth-sports.png", daysLeft: 4 },
     ]
 
     useEffect(() => {
@@ -88,22 +89,32 @@ export default function HomePage() {
                 {/* Featured Projects Carousel */}
                 <section className="mb-20">
                     <h3 className="text-2xl font-bold mb-4">Featured Projects</h3>
-                    <div className="relative">
-                        <Card className="bg-gray-900 overflow-hidden">
-                            <img src={projects[currentProjectIndex].image} alt={projects[currentProjectIndex].title} className="w-full h-64 object-cover" />
-                            <CardContent className="absolute bottom-0 left-0 right-0 bg-black bg-opacity-75 p-4">
-                                <CardTitle>{projects[currentProjectIndex].title}</CardTitle>
-                                <CardDescription>
-                                    Goal: {projects[currentProjectIndex].goal} SOL | Raised: {projects[currentProjectIndex].raised} SOL
-                                </CardDescription>
-                                <div className="mt-2 h-2 bg-gray-700 rounded-full">
-                                    <div
-                                        className="h-full bg-white rounded-full transition-all duration-500 ease-in-out"
-                                        style={{ width: `${(projects[currentProjectIndex].raised / projects[currentProjectIndex].goal) * 100}%` }}
+                    <div className="relative flex space-x-6">
+                        {projects.slice(currentProjectIndex, currentProjectIndex + 3).map((project) => (
+                            <Card key={project.id} className="bg-gray-900 overflow-hidden relative h-[500px] w-[500px]">
+                                <div className="relative w-full h-full">
+                                    <Image
+                                        src={project.image}
+                                        alt={project.title}
+                                        layout="fill"
+                                        objectFit="contain"
+                                        objectPosition="center"
                                     />
                                 </div>
-                            </CardContent>
-                        </Card>
+                                <CardContent className="absolute bottom-0 left-0 right-0 bg-black bg-opacity-75 p-4">
+                                    <CardTitle>{project.title}</CardTitle>
+                                    <CardDescription>
+                                        Goal: {project.goal} SOL | Raised: {project.raised} SOL
+                                    </CardDescription>
+                                    <div className="mt-2 h-2 bg-gray-700 rounded-full">
+                                        <div
+                                            className="h-full bg-white rounded-full transition-all duration-500 ease-in-out"
+                                            style={{ width: `${(project.raised / project.goal) * 100}%` }}
+                                        />
+                                    </div>
+                                </CardContent>
+                            </Card>
+                        ))}
                         <Button
                             variant="outline"
                             className="absolute top-1/2 left-4 transform -translate-y-1/2 bg-black bg-opacity-50 hover:bg-opacity-75"
@@ -120,6 +131,8 @@ export default function HomePage() {
                         </Button>
                     </div>
                 </section>
+
+
 
                 {/* Mode Toggle */}
                 <div className="flex justify-end mb-4 items-center space-x-2">
