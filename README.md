@@ -162,6 +162,14 @@ To set up the **SolRaise** Next.js project locally, follow these steps:
 
 ---
 
+## Architecture
+Alice holds asset A, and Bob holds asset B. Both want to trade their assets, but neither is willing to send theirs first, fearing that the other might not follow through and escape with both assets. This creates a deadlock, where neither party is willing to take the risk of initiating the exchange.
+
+The conventional solution to this dilemma is to involve a third party, C, whom both Alice and Bob trust. In this arrangement, Alice or Bob sends their asset to C first. C then waits until the other party sends their asset, and only after receiving both assets does C release them, completing the trade securely.
+
+https://makeagif.com/gif/-f4v626
+---
+
 ## Contributing
 
 We welcome contributions to **SolRaise**! Please read our [CONTRIBUTING.md](CONTRIBUTING.md) file for guidelines on how to submit pull requests, report issues, and suggest improvements.
