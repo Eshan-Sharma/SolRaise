@@ -10,6 +10,13 @@
 
 ## Solana Escrow Contract Information
 
+### Updated Deployment
+- **Escrow Program ID**: HqqkyS7miTreeC6qhj4iCPD8cuAtbGgiRbJceCGdF9AB
+- **Anchor IDL**: [IDL.json](solana-escrow/idl.json)
+- ![image](https://github.com/user-attachments/assets/ca734112-bb6a-4a15-be07-7dd27f8ba4ec)
+
+
+### Initial Deployment
 - **Escrow Account on Solana**: [Solana Explorer](https://explorer.solana.com/tx/3hpSchewHDvWHm6B9Wk5KqtDjrhzdJDTdafad7iym6sAMnNmXksMKiEzy2NdMgLAP4LRsjN3X2p6F6Xf5XvQbALN?cluster=devnet)
 - **Escrow Program ID**: HqqkyS7miTreeC6qhj4iCPD8cuAtbGgiRbJceCGdF9AB
 - **Anchor IDL**: [IDL.json](solana-escrow/idl.json)
