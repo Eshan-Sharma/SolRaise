@@ -11,6 +11,8 @@ import { CircleDollarSign, PlusCircle, ChevronLeft, ChevronRight, TrendingUp, Us
 import { WalletMultiButton } from "@solana/wallet-adapter-react-ui"
 import DonationModal from "./DonationModal"
 import Image from "next/image"
+import CampaignModal from "./CampaignModal"
+import ProjectCarousel from "./ProjectCarousel"
 
 const Spinner = () => (
     <div className="flex justify-center items-center h-screen">
@@ -32,6 +34,7 @@ export default function HomePage() {
     const [mode, setMode] = useState<"donor" | "recipient">("donor")
     const [isMounted, setIsMounted] = useState<boolean>(false)
     const [currentProjectIndex, setCurrentProjectIndex] = useState<number>(0)
+    const [isCampaignModalOpen, setIsCampaignModalOpen] = useState<boolean>(false);
     const [isModalOpen, setIsModalOpen] = useState<boolean>(false)
     const [selectedProject, setSelectedProject] = useState<Project | null>(null)
 
@@ -83,148 +86,63 @@ export default function HomePage() {
                 <section className="py-20 text-center">
                     <h2 className="text-6xl font-bold mb-4 ">Empower Change with Solana</h2>
                     <p className="text-xl mb-8">Fund innovative projects or create your own campaign on our decentralized platform.</p>
-                    <Button className="bg-white text-black hover:bg-gray-200 text-lg py-6 px-8">Get Started</Button>
+                    <Button onClick={() => { setIsCampaignModalOpen(true) }} className="bg-white text-black hover:bg-gray-200 text-lg py-6 px-8">Get Started</Button>
                 </section>
 
                 {/* Featured Projects Carousel */}
                 <section className="mb-20">
                     <h3 className="text-2xl font-bold mb-4">Featured Projects</h3>
-                    <div className="relative flex space-x-6">
-                        {projects.slice(currentProjectIndex, currentProjectIndex + 3).map((project) => (
-                            <Card key={project.id} className="bg-gray-900 overflow-hidden relative h-[500px] w-[500px]">
-                                <div className="relative w-full h-full">
-                                    <Image
-                                        src={project.image}
-                                        alt={project.title}
-                                        layout="fill"
-                                        objectFit="contain"
-                                        objectPosition="center"
-                                    />
-                                </div>
-                                <CardContent className="absolute bottom-0 left-0 right-0 bg-black bg-opacity-75 p-4">
-                                    <CardTitle>{project.title}</CardTitle>
-                                    <CardDescription>
+                    <ProjectCarousel projects={projects} />
+                </section>
+
+
+                <section className="mb-20">
+                    <div className="flex justify-between items-center">
+                        <h3 className="text-2xl font-bold mb-4">Explore Projects</h3>
+
+                        {/* Mode Toggle */}
+                        {/* <div className="flex justify-end mb-4 items-center space-x-2">
+                            <Label htmlFor="mode-toggle" className="text-sm font-medium text-white">Recipient Mode</Label>
+                            <Switch
+                                id="mode-toggle"
+                                checked={mode === "recipient"}
+                                onCheckedChange={(checked) => setMode(checked ? "recipient" : "donor")}
+                            />
+                        </div> */}
+                    </div>
+                    <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+                        {projects.map((project) => (
+                            <Card key={project.id} className="bg-gray-800 border border-gray-700 hover:bg-gray-700 transition-colors">
+                                <CardHeader>
+                                    <CardTitle className="text-white text-xl">{project.title}</CardTitle>
+                                    <CardDescription className="text-gray-300">
                                         Goal: {project.goal} SOL | Raised: {project.raised} SOL
                                     </CardDescription>
-                                    <div className="mt-2 h-2 bg-gray-700 rounded-full">
+                                </CardHeader>
+                                <CardContent>
+                                    <div className="h-2 bg-gray-700 rounded-full">
                                         <div
-                                            className="h-full bg-white rounded-full transition-all duration-500 ease-in-out"
+                                            className="h-full bg-purple-400 rounded-full transition-all duration-500 ease-in-out"
                                             style={{ width: `${(project.raised / project.goal) * 100}%` }}
                                         />
                                     </div>
                                 </CardContent>
+                                <CardFooter>
+                                    {mode === "donor" && (
+                                        <Button
+                                            className="w-full bg-white text-gray-800 hover:bg-gray-200"
+                                            onClick={() => openDonationModal(project)}
+                                        >
+                                            <CircleDollarSign className="mr-2 h-4 w-4" /> Donate
+                                        </Button>
+                                    )}
+                                </CardFooter>
                             </Card>
                         ))}
-                        <Button
-                            variant="outline"
-                            className="absolute top-1/2 left-4 transform -translate-y-1/2 bg-black bg-opacity-50 hover:bg-opacity-75"
-                            onClick={() => setCurrentProjectIndex((prevIndex) => (prevIndex - 1 + projects.length) % projects.length)}
-                        >
-                            <ChevronLeft className="h-6 w-6" />
-                        </Button>
-                        <Button
-                            variant="outline"
-                            className="absolute top-1/2 right-4 transform -translate-y-1/2 bg-black bg-opacity-50 hover:bg-opacity-75"
-                            onClick={() => setCurrentProjectIndex((prevIndex) => (prevIndex + 1) % projects.length)}
-                        >
-                            <ChevronRight className="h-6 w-6" />
-                        </Button>
                     </div>
+
                 </section>
 
-
-
-                {/* Mode Toggle */}
-                <div className="flex justify-end mb-4 items-center space-x-2">
-                    <Label htmlFor="mode-toggle" className="text-sm font-medium text-white">Recipient Mode</Label>
-                    <Switch
-                        id="mode-toggle"
-                        checked={mode === "recipient"}
-                        onCheckedChange={(checked) => setMode(checked ? "recipient" : "donor")}
-                    />
-                </div>
-
-                {/* Main Tabs */}
-                <Tabs defaultValue="projects" className="w-full mb-20">
-                    <TabsList className="grid w-full grid-cols-2 mb-8">
-                        <TabsTrigger value="projects" className="text-xl text-white">
-                            {mode === "donor" ? "Explore Projects" : "My Projects"}
-                        </TabsTrigger>
-                        <TabsTrigger value="create" className="text-xl text-purple-400">
-                            {mode === "donor" ? "Make a Donation" : "Create Project"}
-                        </TabsTrigger>
-                    </TabsList>
-                    <TabsContent value="projects">
-                        <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-                            {projects.map((project) => (
-                                <Card key={project.id} className="bg-gray-800 border border-gray-700 hover:bg-gray-700 transition-colors">
-                                    <CardHeader>
-                                        <CardTitle className="text-white text-xl">{project.title}</CardTitle>
-                                        <CardDescription className="text-gray-300">
-                                            Goal: {project.goal} SOL | Raised: {project.raised} SOL
-                                        </CardDescription>
-                                    </CardHeader>
-                                    <CardContent>
-                                        <div className="h-2 bg-gray-700 rounded-full">
-                                            <div
-                                                className="h-full bg-purple-400 rounded-full transition-all duration-500 ease-in-out"
-                                                style={{ width: `${(project.raised / project.goal) * 100}%` }}
-                                            />
-                                        </div>
-                                    </CardContent>
-                                    <CardFooter>
-                                        {mode === "donor" && (
-                                            <Button
-                                                className="w-full bg-white text-gray-800 hover:bg-gray-200"
-                                                onClick={() => openDonationModal(project)}
-                                            >
-                                                <CircleDollarSign className="mr-2 h-4 w-4" /> Donate
-                                            </Button>
-                                        )}
-                                    </CardFooter>
-                                </Card>
-                            ))}
-                        </div>
-                    </TabsContent>
-                    <TabsContent value="create">
-                        <Card className="bg-gray-800 border border-gray-700">
-                            <CardHeader>
-                                <CardTitle className="text-white">{mode === "donor" ? "Make a Donation" : "Create a Project"}</CardTitle>
-                            </CardHeader>
-                            <CardContent>
-                                <form className="space-y-4">
-                                    <div className="space-y-2">
-                                        <Label htmlFor="name" className="text-white">{mode === "donor" ? "Project Name" : "Project Title"}</Label>
-                                        <Input id="name" placeholder="Enter name" className="bg-gray-700 text-white placeholder-gray-400" />
-                                    </div>
-                                    <div className="space-y-2">
-                                        <Label htmlFor="amount" className="text-white">{mode === "donor" ? "Donation Amount" : "Funding Goal"}</Label>
-                                        <Input id="amount" placeholder="Enter amount in SOL" type="number" step="0.1" className="bg-gray-700 text-white placeholder-gray-400" />
-                                    </div>
-                                    {mode === "recipient" && (
-                                        <div className="space-y-2">
-                                            <Label htmlFor="description" className="text-white">Project Description</Label>
-                                            <Input id="description" placeholder="Enter project description" className="bg-gray-700 text-white placeholder-gray-400" />
-                                        </div>
-                                    )}
-                                </form>
-                            </CardContent>
-                            <CardFooter>
-                                <Button className="w-full bg-white text-gray-800 hover:bg-gray-200">
-                                    {mode === "donor" ? (
-                                        <>
-                                            <CircleDollarSign className="mr-2 h-4 w-4" /> Donate
-                                        </>
-                                    ) : (
-                                        <>
-                                            <PlusCircle className="mr-2 h-4 w-4" /> Create Project
-                                        </>
-                                    )}
-                                </Button>
-                            </CardFooter>
-                        </Card>
-                    </TabsContent>
-                </Tabs>
                 {/* Statistics Section */}
 
                 <section id="stats" className="py-20 border-t border-gray-700">
@@ -316,6 +234,10 @@ export default function HomePage() {
                             onClose={() => setIsModalOpen(false)}
                         />
                     )}
+                    <CampaignModal
+                        isOpen={isCampaignModalOpen}
+                        onClose={() => setIsCampaignModalOpen(false)}
+                    />
                 </div>
             </footer>
         </div>
