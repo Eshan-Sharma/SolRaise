@@ -8,6 +8,9 @@
 - **Main Project Live Link**: [https://sol-raise.vercel.app/](https://sol-raise.vercel.app/)
 - **Mobile Project**: [Eshan-Sharma/SolRaise-Mobile](https://github.com/Eshan-Sharma/SolRaise-Mobile)
 
+## Project Demo
+
+https://github.com/user-attachments/assets/04d403c7-3b96-437d-a17c-cd514f51eac8
 
 ## Tech Stack
 
