@@ -27,3 +27,19 @@ export async function sendCampaignToDb(
         throw new Error(`Error while sending data to db: ${e}`)
     }
 }
+
+export async function sendDonation(campaignId: string, donorWallet: string, amount: number) {
+    try {
+        const newDonation = await prisma.donation.create({
+            data: {
+                campaignId,
+                donorWallet,
+                amount
+            }
+        })
+        console.log(newDonation)
+
+    } catch (e) {
+        throw new Error(`Error while sending data to db: ${e}`)
+    }
+}

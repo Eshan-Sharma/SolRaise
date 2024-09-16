@@ -16,6 +16,7 @@ import { WalletMultiButton } from "@solana/wallet-adapter-react-ui";
 import DonationModal from "./DonationModal";
 import CampaignModal from "./CampaignModal";
 import ProjectCarousel from "./ProjectCarousel";
+import { getCampaigns } from "../actions/getting-data-from-db";
 
 const Spinner = () => (
   <div className="flex justify-center items-center h-screen">
@@ -24,26 +25,32 @@ const Spinner = () => (
 );
 
 interface Project {
-  id: number;
+  id: string;
   title: string;
   goal: number;
   raised: number;
   daysLeft?: number;
   image: string;
 }
+interface Campaign {
+  id: string;
+  title: string;
+  description: string;
+  creatorWallet: string;
+  fundsGoal: number;
+  duration: number;
+  imageUrl: string;
+  status: string;
+  createdAt: Date;
+  updatedAt: Date;
+}
+
+
 
 export default function HomePage() {
-  const [mode] = useState<"donor" | "recipient">("donor");
-  const [isMounted, setIsMounted] = useState<boolean>(false);
-  const [, setCurrentProjectIndex] = useState<number>(0);
-  const [isCampaignModalOpen, setIsCampaignModalOpen] =
-    useState<boolean>(false);
-  const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
-  const [selectedProject, setSelectedProject] = useState<Project | null>(null);
-
-  const projects = [
+  const initialProjects = [
     {
-      id: 1,
+      id: '1',
       title: "Community Garden",
       goal: 500,
       raised: 250,
@@ -51,7 +58,7 @@ export default function HomePage() {
       daysLeft: 10,
     },
     {
-      id: 2,
+      id: '2',
       title: "Local School Renovation",
       goal: 1000,
       raised: 750,
@@ -59,7 +66,7 @@ export default function HomePage() {
       daysLeft: 30,
     },
     {
-      id: 3,
+      id: '3',
       title: "Homeless Shelter Support",
       goal: 800,
       raised: 300,
@@ -67,7 +74,7 @@ export default function HomePage() {
       daysLeft: 5,
     },
     {
-      id: 4,
+      id: '4',
       title: "Clean Energy Initiative",
       goal: 1500,
       raised: 900,
@@ -75,7 +82,7 @@ export default function HomePage() {
       daysLeft: 100,
     },
     {
-      id: 5,
+      id: '5',
       title: "Youth Sports Program",
       goal: 600,
       raised: 450,
@@ -83,9 +90,48 @@ export default function HomePage() {
       daysLeft: 4,
     },
   ];
+  const [mode] = useState<"donor" | "recipient">("donor");
+  const [isMounted, setIsMounted] = useState<boolean>(false);
+  const [, setCurrentProjectIndex] = useState<number>(0);
+  const [isCampaignModalOpen, setIsCampaignModalOpen] = useState<boolean>(false);
+  const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
+  const [selectedProject, setSelectedProject] = useState<Project | null>(null);
+  const [projects, setProjects] = useState<Project[]>(initialProjects);
 
   useEffect(() => {
-    setIsMounted(true);
+    const fetchCampaigns = async () => {
+      try {
+        const campaigns: Campaign[] = await getCampaigns();
+        console.log(campaigns);
+        const newProjects: Project[] = campaigns.map(campaign => ({
+          id: campaign.id,
+          title: campaign.title,
+          goal: campaign.fundsGoal,
+          raised: 0,
+          daysLeft: Math.ceil((new Date(campaign.createdAt).getTime() + campaign.duration * 24 * 60 * 60 * 1000 - Date.now()) / (24 * 60 * 60 * 1000)),
+          image: campaign.imageUrl || "/placeholder-image.png"
+        }));
+        console.log(newProjects);
+
+        setProjects(prevProjects => {
+          const uniqueProjects = [...prevProjects];
+          newProjects.forEach(newProject => {
+            if (!uniqueProjects.some(project => project.id === newProject.id)) {
+              uniqueProjects.push(newProject);
+            }
+          });
+          return uniqueProjects;
+        });
+        console.log(projects)
+      } catch (error) {
+        console.error("Failed to fetch campaigns:", error);
+      } finally {
+        setIsMounted(true);
+
+      }
+    };
+
+    fetchCampaigns();
   }, []);
 
   useEffect(() => {
@@ -103,7 +149,6 @@ export default function HomePage() {
   if (!isMounted) {
     return <Spinner />;
   }
-
   return (
     <div className="min-h-screen bg-black text-white">
       <header className="border-b border-gray-800 p-4 sticky top-0 bg-black z-10">

@@ -12,9 +12,12 @@ import {
   DialogDescription,
   DialogFooter,
 } from "@/components/ui/dialog";
+import { useWallet } from "@solana/wallet-adapter-react";
+import { sendDonation } from "../actions/storing-data-in-db";
+import { useToast } from "@/hooks/use-toast";
 
 interface Project {
-  id: number;
+  id: string;
   title: string;
   goal: number;
   raised: number;
@@ -36,9 +39,21 @@ const DonationModal: React.FC<DonationModalProps> = ({
   const [donationAmount, setDonationAmount] = useState<string>("");
   const [matchDonation, setMatchDonation] = useState<boolean>(false);
   const [maxMatchAmount, setMaxMatchAmount] = useState<string>("");
+  const { publicKey } = useWallet();
+  const { toast } = useToast()
 
-  const handleDonate = () => {
-    // Handle donation logic here
+  const handleDonate = async () => {
+
+    if (!publicKey) {
+      toast({
+        variant: "destructive",
+        title: "Wallet not connected",
+        description: "Please connect your wallet to create a campaign.",
+        duration: 3000,
+      });
+      return;
+    }
+    await sendDonation(project.id.toString(), publicKey?.toString(), parseFloat(donationAmount) ?? parseFloat(maxMatchAmount));
     console.log("Donation amount:", donationAmount);
     console.log("Match donation:", matchDonation);
     console.log("Max match amount:", maxMatchAmount);

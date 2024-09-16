@@ -10,7 +10,7 @@ import { ChevronLeft, ChevronRight } from "lucide-react";
 import Image from "next/image";
 
 interface Project {
-  id: number;
+  id: string;
   title: string;
   goal: number;
   raised: number;
@@ -71,9 +71,8 @@ const ProjectCarousel: React.FC<CarouselProps> = ({ projects }) => {
       setCurrentIndex(newIndex);
       if (carouselRef.current) {
         carouselRef.current.style.transition = "none";
-        carouselRef.current.style.transform = `translateX(-${
-          (newIndex * 100) / projectsPerSlide
-        }%)`;
+        carouselRef.current.style.transform = `translateX(-${(newIndex * 100) / projectsPerSlide
+          }%)`;
         // Force reflow
         carouselRef.current.offsetHeight;
         carouselRef.current.style.transition = "transform 0.5s ease-in-out";
