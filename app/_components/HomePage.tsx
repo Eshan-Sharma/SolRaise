@@ -161,7 +161,7 @@ export default function HomePage() {
             >
               Projects
             </a>
-            <a href="#about" className="hover:text-gray-300 transition-colors">
+            <a href="#footer" className="hover:text-gray-300 transition-colors">
               About us
             </a>
             <a href="#stats" className="hover:text-gray-300 transition-colors">
@@ -199,7 +199,7 @@ export default function HomePage() {
         </section>
 
         {/* Featured Projects Carousel */}
-        <section className="mb-20">
+        <section id="projects"  className="mb-20">
           <h3 className="text-2xl font-bold mb-4">Featured Projects</h3>
           <ProjectCarousel projects={projects} />
         </section>
@@ -320,7 +320,7 @@ export default function HomePage() {
         </section>
       </main>
 
-      <footer className="bg-gray-900 py-12 border-t border-gray-800">
+      <footer id="footer" className="bg-gray-900 py-12 border-t border-gray-800">
         <div className="container mx-auto px-4">
           <div className="grid md:grid-cols-4 gap-8">
             <div>
