@@ -11,11 +11,11 @@ import {
   DialogFooter,
 } from "@/components/ui/dialog";
 import { Textarea } from "@/components/ui/textarea";
-import { getSignedURL } from "@/lib/utils";
 import { sendCampaignToDb } from "../actions/storing-data-in-db";
 import { useWallet } from "@solana/wallet-adapter-react";
 import { useToast } from "@/hooks/use-toast";
 import { Loader2 } from "lucide-react";
+import { getSignedURL } from "../actions/getSignedUrl";
 
 interface CampaignModalProps {
   isOpen: boolean;
