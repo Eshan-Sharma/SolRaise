@@ -12,6 +12,8 @@
 
 https://github.com/user-attachments/assets/04d403c7-3b96-437d-a17c-cd514f51eac8
 
+For detailed updates and incremental demo videos, check out the [Incremental Project Updates](INCREMENTAL_PROJECT_UPDATE_DEMOS.md) page.
+
 ## Tech Stack
 
 ### Web Application (SolRaise)
