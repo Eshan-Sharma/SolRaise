@@ -325,10 +325,23 @@ export default function HomePage() {
           <div className="grid md:grid-cols-4 gap-8">
             <div>
               <h4 className="font-bold mb-4">About Us</h4>
-              <p className="text-sm text-gray-400">
-                Empowering innovation through decentralized crowdfunding on
-                Solana.
-              </p>
+              <ul className="space-y-2 text-sm text-gray-400">
+                <li>
+                <a href="#" className="hover:text-white transition-colors">
+                   What Do We Do
+                </a>
+                </li>
+                <li>
+                <a href="#" className="hover:text-white transition-colors">
+                   How Does It Work
+                </a>
+                </li>
+                <li>
+                <a href="#" className="hover:text-white transition-colors">
+                   Types of Users
+                </a>
+                </li>
+              </ul>
             </div>
             <div>
               <h4 className="font-bold mb-4">Quick Links</h4>
